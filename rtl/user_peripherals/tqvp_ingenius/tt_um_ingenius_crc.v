@@ -1,4 +1,4 @@
-module tqvp_ingenius (
+module tt_um_ingenius_crc (
     input         clk,
     input         rst_n,
     input  [7:0]  ui_in,
@@ -15,7 +15,7 @@ module tqvp_ingenius (
     // Registers
     reg [31:0] ctrl_reg, status_reg, seed_reg, len_reg, data_reg, result_reg;
 
-    // Datapath interface signals (for Timothy)
+    // Datapath interface signals
     reg        crc_start;
     reg        crc_reset;
     wire       crc_busy;
@@ -25,23 +25,25 @@ module tqvp_ingenius (
     wire [31:0] crc_seed;
     wire [15:0] crc_len;
 
-    // CTRL register write
-    always @(posedge clk) begin
+    // CTRL register write with pulse generation
+    always @(posedge clk or negedge rst_n) begin
         if (!rst_n) begin
-            ctrl_reg <= 32'b0;
-            crc_start <= 1'b0;
-            crc_reset <= 1'b0;
-        end else if (address == 6'h0 && data_write_n != 2'b11) begin
-            ctrl_reg <= data_in;
-            crc_start <= data_in[0]; // bit0 = start
-            crc_reset <= data_in[1]; // bit1 = reset
+            ctrl_reg   <= 32'b0;
+            crc_start  <= 1'b0;
+            crc_reset  <= 1'b0;
         end else begin
-            crc_start <= 1'b0; // pulse
+            // Latch CTRL register
+            if (address == 6'h0 && data_write_n != 2'b11)
+                ctrl_reg <= data_in;
+
+            // Generate one-cycle pulses
+            crc_start <= (address == 6'h0 && data_write_n != 2'b11 && data_in[0]);
+            crc_reset <= (address == 6'h0 && data_write_n != 2'b11 && data_in[1]);
         end
     end
 
     // SEED register
-    always @(posedge clk) begin
+    always @(posedge clk or negedge rst_n) begin
         if (!rst_n)
             seed_reg <= 32'b0;
         else if (address == 6'h8 && data_write_n != 2'b11)
@@ -50,7 +52,7 @@ module tqvp_ingenius (
     assign crc_seed = seed_reg;
 
     // LEN register
-    always @(posedge clk) begin
+    always @(posedge clk or negedge rst_n) begin
         if (!rst_n)
             len_reg <= 32'b0;
         else if (address == 6'hC && data_write_n != 2'b11)
@@ -59,7 +61,7 @@ module tqvp_ingenius (
     assign crc_len = len_reg[15:0];
 
     // DATA register
-    always @(posedge clk) begin
+    always @(posedge clk or negedge rst_n) begin
         if (!rst_n)
             data_reg <= 32'b0;
         else if (address == 6'h10 && data_write_n != 2'b11)
@@ -68,7 +70,7 @@ module tqvp_ingenius (
     assign crc_data_in = data_reg;
 
     // RESULT register updated by datapath
-    always @(posedge clk) begin
+    always @(posedge clk or negedge rst_n) begin
         if (!rst_n)
             result_reg <= 32'b0;
         else if (crc_done)
@@ -76,7 +78,7 @@ module tqvp_ingenius (
     end
 
     // STATUS register updated by datapath
-    always @(posedge clk) begin
+    always @(posedge clk or negedge rst_n) begin
         if (!rst_n)
             status_reg <= 32'b0;
         else begin
@@ -103,5 +105,28 @@ module tqvp_ingenius (
     wire _unused = &{data_read_n, 1'b0};
 
     assign uo_out = 8'h0; // not used for CRC
+
+    // === CRC datapath instantiation ===
+    crc_datapath u_crc (
+        .clk     (clk),
+        .rst_n   (rst_n),
+        .start   (crc_start),
+        .reset   (crc_reset),
+        .seed    (crc_seed),
+        .len     (crc_len),
+        .data_in (crc_data_in),
+        .busy    (crc_busy),
+        .done    (crc_done),
+        .result  (crc_result)
+    );
+
+    // === Dummy signals to satisfy cocotb test harness ===
+    wire [3:0] qspi_data_in     = 4'b0;
+    wire [3:0] qspi_data_out    = 4'b0;
+    wire       qspi_clk         = 1'b0;
+    wire       qspi_clk_out     = 1'b0;
+    wire       qspi_cs          = 1'b1;
+    wire       qspi_flash_select = 1'b0;
+    wire       ena              = 1'b1;
 
 endmodule
