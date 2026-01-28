@@ -9,7 +9,7 @@ This folder contains structured prompts used across different phases of our work
    - Usage: Use this file to outline goals, timelines, and resource allocation before execution begins.
    - Example entries: project milestones, brainstorming notes, task assignments.
 
-2. **design_verification_and_documentation.md**
+2. **design.md**
    - Purpose: Records design validation steps and supporting documentation.
    - Usage: Use this file to verify design decisions, track test cases, and document outcomes.
    - Example entries: design reviews, verification checklists, documentation drafts.
