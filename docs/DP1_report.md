@@ -1,6 +1,7 @@
 # DP1 Report – Team Ingenius
 
 ## 1. RTL Package
+
 - **Peripheral Name:** Ingenius CRC Engine
 - **Files:**
   - `rtl/user_peripherals/tqvp_ingenius/tt_um_ingenius_crc.v` (top-level wrapper)
@@ -11,6 +12,7 @@
 ---
 
 ## 2. Design Rationale
+
 - **Choice of Peripheral:** Cyclic Redundancy Check (CRC) engine for error detection in data streams.
 - **Why CRC:** Lightweight, widely used in communication protocols, demonstrates datapath design and MMIO integration.
 - **Architecture Highlights:**
@@ -21,6 +23,7 @@
 ---
 
 ## 3. Verification
+
 - **Testbench:** Cocotb-based test located at `test/user_peripherals/tqvp_ingenius/test.py`
 - **Coverage:**
   - Known CRC vectors
@@ -31,6 +34,7 @@
 ---
 
 ## 4. AI Prompt Logs
+
 - **Design Prompts:** `prompts/design_prompts.md`
 - **Debug Prompts:** `prompts/debug_prompts.md`
 - **Summary:** Documented the iterative AI-assisted design process, including datapath refinement and MMIO integration.
@@ -38,23 +42,35 @@
 ---
 
 ## 5. Synthesis & PPA Results
-- **Toolchain:** Yosys + OpenLane
-- **Reports:** Located in `reports/`
-- **Key Metrics:**
-  - Area: `<insert value>`
-  - Timing (Worst Negative Slack): `<insert value>`
-  - Power Estimate: `<insert value>`
-- **Notes:** CRC engine meets timing at target frequency.
+
+- As per Phase 1 requirements, we ran baseline synthesis using OpenLane/Yosys. The design fits within the medium complexity target and meets all timing constraints at 50 MHz.
+
+**Summary of Results:**
+
+| Metric            | Value               | Status   | Notes                        |
+| ----------------- | ------------------- | -------- | ---------------------------- |
+| **Cell Count**    | 1,115               | -        | Total logic gates used       |
+| **Chip Area**     | 13,457.91 $\mu m^2$ | -        | Physical size on Sky130      |
+| **WNS**           | 0.00 ns             | **PASS** | No timing violations         |
+| **Max Frequency** | 50 MHz              | -        | Target frequency met exactly |
+
+**Detailed Reports:**
+For the full logs and breakdown, please refer to the files in the reports directory:
+
+- [Area & Timing Report](../reports/areatimingreport.txt)
+- [Power Report](../reports/power_report.txt)
 
 ---
 
 ## 6. Schematic / Block Diagram
+
 ![CRC Peripheral Schematic](../reports/schematic.png)
 
-*Description:* CRC datapath connected to MMIO wrapper, with bus interface and interrupt line.
+_Description:_ CRC datapath connected to MMIO wrapper, with bus interface and interrupt line.
 
 ---
 
 ## 7. Submission Tag
+
 - **Commit Tag:** `DP1-Submission`
 - **Repo:** Private team repo `AIHDL-Team_Ingenius-`
