@@ -10,3 +10,12 @@ We implemented a medium-complexity CRC peripheral (Ingenius CRC Engine) for the 
 - `reports/` – Synthesis, timing, and power reports
 - `openlane_run/` – OpenLane configuration and run files
 - `info.yaml` – Build configuration for the peripheral
+
+## Documentation
+All DP1 documentation is located in the `docs/` folder:
+
+- `design_methodology.md` – How the CRC peripheral was designed
+- `ai_strategy.md` – How AI was used during development
+- `challenges_faced.md` – Issues we encountered and how we solved them
+- `lessons_learned.md` – What the team learned during DP1
+- `block_diagram.md` – Text-based architecture diagram of the design
