@@ -1,9 +1,7 @@
 # Peripheral configuration for TinyQV
-# This file tells the build system which source files to compile
-# and which module is the top-level entry point.
 
 source_files:
-  - src/user_peripherals/tqvp_ingenius/tqvp_ingenius.v
-  - src/user_peripherals/tqvp_ingenius/crc_datapath.v
+  - rtl/user_peripherals/tqvp_ingenius/tt_um_ingenius_crc.v
+  - rtl/user_peripherals/tqvp_ingenius/crc_datapath.v
 
-top_module: tqvp_ingenius
+top_module: tt_um_ingenius_crc
