@@ -1,0 +1,5 @@
+# Ignore generated simulation artifacts
+*.vcd
+*.log
+crc_tb
+*.bak_*
