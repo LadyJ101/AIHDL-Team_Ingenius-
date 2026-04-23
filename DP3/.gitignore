@@ -1,0 +1,30 @@
+# OpenLane synthesis artifacts
+runs/
+.openlane_*
+*.log
+
+# Simulation outputs
+*.vcd
+*.vvp
+*.out
+
+# Reports (keep docs but ignore raw reports in some cases)
+Reports/*.rpt
+Reports/*.rpt.gz
+Reports/*.detailed
+
+# Netlist (compiled outputs)
+Netlist/*.v
+Netlist/*.net
+
+# Cache/temp
+__pycache__/
+*.pyc
+.DS_Store
+*.swp
+*~
+
+# IDE
+.vscode/
+.idea/
+*.iml
